@@ -3,6 +3,7 @@ import Overview from "./Overview";
 import Weather from './Weather';
 import Symbols from "./Symbols";
 
+
 const MainDisplay = () => {
     const [view, setView] = useState("Overview");
     return (

@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectDisplay } from "../redux/slices/displayCountrySlice";
+import { useDispatch } from "react-redux";
+import { stopLoading, setLoading } from "../redux/slices/loadingSlice";
 
 const Weather = () => {
     const [weather, setWeather] = useState();
@@ -9,7 +11,8 @@ const Weather = () => {
     const latitude = display.capitalInfo.latlng[0]
     const longitude = display.capitalInfo.latlng[1]
     const apiKey = process.env.REACT_APP_API_KEY
-
+    const dispatch = useDispatch()
+    
     useEffect(() => {
         const options = {
             method: 'GET',
@@ -21,13 +24,19 @@ const Weather = () => {
             }
         };
 
-        axios.request(options)
+        dispatch(setLoading())
+
+        setTimeout(() => {
+            axios.request(options)
             .then((res) => {
                 // console.log(res.data)
                 setWeather(res.data)
+                dispatch(stopLoading())
             })
             .catch((err) => console.log(err))
-    }, [latitude, longitude])
+        }, 2000)
+
+    }, [apiKey,latitude, longitude, dispatch])
    
 
         return (
